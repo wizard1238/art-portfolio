@@ -1,0 +1,19 @@
+extends layout
+
+block head
+  script(src="/javascripts/admin.js")
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  a(href='/') See normal view 
+
+  form(action="/upload", method="post", enctype='multipart/form-data' id='upload_form')
+    label(for="img") Select an image: 
+    input(type="file", name="img", id="img" accept="image/*" multiple)
+    input(type="button" id='upload_submit' value='submit')
+
+  form(id="images")
+    div(id='images_div')
+    input(type='button' value='delete' id='delete')
