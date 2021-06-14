@@ -33,5 +33,6 @@ router.get('/admin', function(req, res, next) {
 
 router.get('/getImages', upload.get)
 router.post('/upload', mult.array('img'), upload.upload)
+router.post('/reorder', upload.reorder)
 router.post('/delete', upload.delete)
 module.exports = router;

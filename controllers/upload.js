@@ -30,7 +30,45 @@ exports.get = function(req, res, next) {
 }
 
 exports.upload = function(req, res, next) {
-    console.log(req.files)
+    res.sendStatus(200)
+}
+
+exports.reorder = async function(req, res, next) {
+    let inputOrder = req.body
+    
+
+    fs.readdir("./public/images/art", (dirErr, files) => {
+        if (dirErr) console.log(dirErr)
+        
+        let promises = []
+        for (let i = 0; i < inputOrder.length; i++) {
+            let promise = new Promise((resolve, reject) => {
+                fs.rename(`./public/images/art/${files[i]}`, `./public/images/art/${parseInt(inputOrder[i]) + inputOrder.length}`, (err) => {
+                    if (err) console.log(err)
+                    resolve()
+                })
+            })
+    
+            promises.push(promise)
+        }
+
+        Promise.all(promises)
+        .then(() => {
+            fs.readdir("./public/images/art", (dirErr, changedFiles) => {
+                if (dirErr) console.log(dirErr)
+
+                for (let i = 0; i < inputOrder.length; i++) {
+                    fs.rename(`./public/images/art/${changedFiles[i]}`, `./public/images/art/${parseInt(changedFiles[i]) - inputOrder.length}`, (err) => {
+                        if (err) console.log(err)
+                    })
+                }
+            })
+        })
+    })
+    
+
+    
+
     res.sendStatus(200)
 }
 
